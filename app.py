@@ -4,14 +4,14 @@ import random, requests, datetime
 from config import *
 from database import db
 
-# Enable HD wallet features
+
 Account.enable_unaudited_hdwallet_features()
 
 app = Flask(__name__)
 app.config.from_object('config')
 db.init_app(app)
 
-# ------------------ Database Models ------------------
+
 class Wallet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     address = db.Column(db.String(100), unique=True, nullable=False)
@@ -25,13 +25,13 @@ class Transaction(db.Model):
     amount_eth = db.Column(db.Float)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-# ------------------ Routes ------------------
+
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# ------------------ Create / Import Wallet ------------------
+
 @app.route('/wallet', methods=['POST'])
 def wallet():
     data = request.get_json()
@@ -48,12 +48,12 @@ def wallet():
             return jsonify({"error": "Mnemonic required for import"}), 400
         acct = Account.from_mnemonic(mnemonic)
         address = acct.address
-        balance = 0.0  # imported wallets start with 0 balance
+        balance = 0.0  
 
     else:
         return jsonify({"error": "Invalid action"}), 400
 
-    # Save wallet in DB if not exists
+    
     wallet = Wallet.query.filter_by(address=address).first()
     if not wallet:
         wallet = Wallet(address=address, mnemonic=mnemonic, balance=balance)
@@ -63,7 +63,6 @@ def wallet():
     session['address'] = address
     return jsonify({"address": address, "balance": wallet.balance})
 
-# ------------------ Dashboard ------------------
 @app.route('/dashboard')
 def dashboard():
     addr = session.get('address')
@@ -72,7 +71,6 @@ def dashboard():
     wallet = Wallet.query.filter_by(address=addr).first()
     return render_template('dashboard.html', wallet=wallet)
 
-# ------------------ Transfer Pages ------------------
 @app.route('/transfer')
 def transfer_page():
     return render_template('transfer.html')
@@ -146,7 +144,6 @@ def confirm_transfer():
     session.pop('pending_transfer', None)
     return jsonify({"status": "success", "message": "Transfer complete"})
 
-# ------------------ Transaction History ------------------
 @app.route('/history')
 def history():
     addr = session.get('address')
