@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Transaction History</title>
+  <style>
+    body { background-color: black; color: white; font-family: Arial; text-align: center; }
+    table { margin: 30px auto; border-collapse: collapse; width: 80%; }
+    th, td { padding: 12px; border-bottom: 1px solid #333; }
+    th { color: #00ff88; }
+    a { color: #00ff88; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h2>Transaction History</h2>
+
+  {% if txs %}
+  <table>
+    <tr>
+      <th>Sender</th>
+      <th>Recipient</th>
+      <th>Amount (ETH)</th>
+      <th>Timestamp</th>
+    </tr>
+    {% for tx in txs %}
+    <tr>
+      <td>{{ tx.sender }}</td>
+      <td>{{ tx.recipient }}</td>
+      <td>{{ tx.amount_eth }}</td>
+      <td>{{ tx.timestamp }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+    <p>No transactions found.</p>
+  {% endif %}
+
+  <a href="/dashboard">← Back to Dashboard</a>
+</body>
+</html>

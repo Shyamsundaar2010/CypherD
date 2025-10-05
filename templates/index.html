@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wallet</title>
+  <style>
+    body { background-color: black; color: white; text-align: center; font-family: Arial; }
+    input, button { padding: 10px; margin: 10px; border-radius: 5px; border: none; }
+    button { background-color: #00ff88; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>Wallet</h2>
+
+  <div>
+    <h3>Create New Wallet</h3>
+    <button type="button" onclick="createWallet()">Create Wallet</button>
+  </div>
+
+  <div>
+    <h3>Import Wallet</h3>
+    <input type="text" id="mnemonic" placeholder="Enter 12-word mnemonic">
+    <button type="button" onclick="importWallet()">Import Wallet</button>
+  </div>
+
+  <script>
+    async function createWallet() {
+      const res = await fetch("/wallet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "create" })
+      });
+      const data = await res.json();
+      alert(`Wallet Created!\nAddress: ${data.address}\nBalance: ${data.balance} ETH`);
+      window.location.href = "/dashboard";
+    }
+
+    async function importWallet() {
+      const mnemonic = document.getElementById("mnemonic").value.trim();
+      if (!mnemonic) { alert("Please enter a mnemonic"); return; }
+
+      const res = await fetch("/wallet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "import", mnemonic })
+      });
+
+      const data = await res.json();
+      if(data.error){ alert(data.error); return; }
+
+      alert(`Wallet Imported!\nAddress: ${data.address}\nBalance: ${data.balance} ETH`);
+      window.location.href = "/dashboard";
+    }
+  </script>
+</body>
+</html>

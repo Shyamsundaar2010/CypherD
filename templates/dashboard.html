@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wallet Dashboard</title>
+  <style>
+    body { background-color: black; color: white; text-align: center; font-family: Arial; }
+    .btn { background-color: #00ff88; padding: 10px 20px; border: none; cursor: pointer; margin: 10px; font-size: 18px; border-radius: 8px; }
+    a { color: #00ff88; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h2>Wallet Dashboard</h2>
+  <p><strong>Address:</strong> {{ wallet.address }}</p>
+  <p><strong>Balance:</strong> {{ wallet.balance }} ETH</p>
+
+  <div>
+    <a href="/transfer"><button class="btn">Send Transfer</button></a>
+
+    <a href="/history"><button class="btn">View Transaction History</button></a>
+  </div>
+
+  <a href="/">Logout</a>
+</body>
+</html>

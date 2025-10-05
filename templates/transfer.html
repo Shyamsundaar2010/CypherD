@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Send Transfer</title>
+  <style>
+    body { background-color: black; color: white; text-align: center; font-family: Arial; }
+    input, select { padding: 10px; margin: 10px; border-radius: 5px; width: 250px; border: none; }
+    button { background-color: #00ff88; padding: 10px 20px; border: none; cursor: pointer; font-size: 16px; border-radius: 8px; }
+    .box { background-color: #111; padding: 30px; border-radius: 10px; display: inline-block; margin-top: 50px; }
+  </style>
+</head>
+<body>
+  <h2>Send ETH / USD Transfer</h2>
+  <div class="box">
+    <input type="text" id="recipient" placeholder="Recipient Address"><br>
+    <input type="number" id="amount" placeholder="Amount"><br>
+    <select id="currency">
+      <option value="ETH">ETH</option>
+      <option value="USD">USD</option>
+    </select><br>
+    <button type="button" onclick="createApproval()">Create Approval Message</button>
+
+    <p id="approvalMsg" style="color:#00ff88; margin-top:10px;"></p>
+    <button id="confirmBtn" type="button" style="display:none;" onclick="confirmTransfer()">Confirm Transfer</button>
+  </div>
+
+  <script>
+    let transferData = {};
+
+    async function createApproval() {
+      const recipient = document.getElementById("recipient").value;
+      const amount = document.getElementById("amount").value;
+      const currency = document.getElementById("currency").value;
+
+      const res = await fetch("/transfer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ recipient, amount, currency })
+      });
+
+      const data = await res.json();
+
+      if(data.error){
+        alert("❌ " + data.error);
+        return;
+      }
+
+      document.getElementById("approvalMsg").innerText = data.approval_message;
+      transferData = { recipient, amount, currency };
+      document.getElementById("confirmBtn").style.display = "inline-block";
+    }
+
+    async function confirmTransfer() {
+      const res = await fetch("/confirm_transfer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(transferData)
+      });
+
+      const data = await res.json();
+
+      if(data.status === "success"){
+        alert("✅ Transfer complete!");
+        window.location.href = "/dashboard";
+      } else {
+        alert("❌ " + data.error);
+      }
+    }
+  </script>
+</body>
+</html>
