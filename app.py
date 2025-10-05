@@ -155,7 +155,7 @@ def history():
     ).all()
     return render_template('history.html', txs=txs)
 
-# ------------------ Init DB ------------------
+
 with app.app_context():
     db.create_all()
 
