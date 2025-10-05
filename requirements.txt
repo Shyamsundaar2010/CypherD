@@ -1,0 +1,6 @@
+flask
+flask_sqlalchemy
+psycopg2-binary
+eth-account
+requests
+python-dotenv
