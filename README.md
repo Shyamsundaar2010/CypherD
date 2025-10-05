@@ -19,7 +19,7 @@ Transaction History
 How to Set Up the Project
 
 Step 1: Clone the repository
-git clone https://github.com/yourusername/ethereum-wallet-dashboard.git
+https://github.com/Shyamsundaar2010/CypherD.git
 
 Step 2: Install dependencies
 pip install Flask Flask-SQLAlchemy psycopg2-binary requests eth-account
